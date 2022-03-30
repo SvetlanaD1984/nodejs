@@ -1,10 +1,10 @@
 {
-  "name": "dz1",
+  "name": "dz4",
   "version": "1.0.0",
   "description": "dz node Davletbaeva",
-  "main": "index.js",
+  "main": "cli.js",
   "scripts": {
-    "dev": "node index.js",
+    "start": "node cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/SvetlanaD1984/nodejs#readme",
   "dependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "inquirer": "^8.2.2",
+    "yargs": "^17.4.0"
   }
 }
