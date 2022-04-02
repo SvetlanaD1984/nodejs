@@ -1,47 +1,43 @@
-const colors = require("colors");
+const http = require("http");
+const path = require("path");
+const fs = require("fs");
 
-const Colors = { GREEN: 0, YELLOW: 1, RED: 2 };
+(async () => {
+  const isFile = (path) => fs.lstatSync(path).isFile();
 
-let currentColor = Colors.GREEN;
-const leftRest = +process.argv[2];
-const rightRest = +process.argv[3];
-let noPrimeNum = true;
+  http.createServer((req, res) => {
+      const fullPath = path.join(process.cwd(), req.url);
+      console.log(fullPath);
+      if (!fs.existsSync(fullPath))
+        return res.end("File or directory not found");
 
-if (isNaN(leftRest) || isNaN(rightRest)) {
-  console.log("Incorrect start parameters".red);
-  return;
-}
+      if (isFile(fullPath)) {
+        return fs.createReadStream(fullPath).pipe(res);
+      }
 
-const isPrimeNum = (num) => {
-  if (num <= 1) return false;
-  for (let i = 2; i < num; i++) if (num % i === 0) return false;
-  return true;
-};
-const changeColor = () => {
-  currentColor++;
-  if (currentColor > Colors.RED) currentColor = Colors.GREEN;
-};
+      let linksList = "";
 
-const colorPrint = (num) => {
-  if (noPrimeNum) noPrimeNum = false;
-  switch (currentColor) {
-    case Colors.RED:
-      console.log(`${num}`.red);
-      break;
-    case Colors.GREEN:
-      console.log(`${num}`.green);
-      break;
-    case Colors.YELLOW:
-      console.log(`${num}`.yellow);
-      break;
-  }
-  changeColor();
-};
+      const urlParams = req.url.match(/[\d\w\.]+/gi);
 
-for (let i = leftRest; i <= rightRest; i++) {
-  if (isPrimeNum(i)) colorPrint(i);
-}
-if (noPrimeNum)
-  console.log(
-    `There are no primes in this range[${leftRest},${rightRest}]`.red
-  );
+      if (urlParams) {
+        urlParams.pop();
+        const prevUrl = urlParams.join("/");
+        linksList = urlParams.length
+          ? `<li><a href="/${prevUrl}">..</a></li>`
+          : '<li><a href="/">..</a></li>';
+      }
+
+      fs.readdirSync(fullPath).forEach((fileName) => {
+        const filePath = path.join(req.url, fileName);
+        linksList += `<li><a href="${filePath}">${fileName}</a></li>`;
+      });
+      const HTML = fs
+        .readFileSync(path.join(__dirname, "index.html"), "utf-8")
+        .replace("##links", linksList);
+      res.writeHead(200, {
+        "Content-Type": "text/html",
+      });
+      return res.end(HTML);
+    })
+    .listen(5555);
+})();
