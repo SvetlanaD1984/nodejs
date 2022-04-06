@@ -1,4 +1,4 @@
-const colors = require("colors");
+require("colors");
 
 const Colors = { GREEN: 0, YELLOW: 1, RED: 2 };
 
@@ -23,18 +23,17 @@ const changeColor = () => {
 };
 
 const colorPrint = (num) => {
-  if (noPrimeNum) noPrimeNum = false;
-  switch (currentColor) {
-    case Colors.RED:
-      console.log(`${num}`.red);
-      break;
-    case Colors.GREEN:
-      console.log(`${num}`.green);
-      break;
-    case Colors.YELLOW:
-      console.log(`${num}`.yellow);
-      break;
-  }
+    if (noPrimeNum) {
+        if (currentColor == Colors.RED) {
+          console.log(`${num}`.red);
+        }
+        else if (currentColor == Colors.GREEN) {
+          console.log(`${num}`.green);
+        }    
+        else {
+          console.log(`${num}`.yellow);
+        }    
+        }
   changeColor();
 };
 
@@ -45,3 +44,9 @@ if (noPrimeNum)
   console.log(
     `There are no primes in this range[${leftRest},${rightRest}]`.red
   );
+
+
+
+
+  
+  
