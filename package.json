@@ -1,0 +1,27 @@
+{
+  "name": "dz5",
+  "version": "1.0.0",
+  "description": "dz node Davletbaeva",
+  "main": "cli.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SvetlanaD1984/nodejs.git"
+  },
+  "author": "Svetlana Davletbaeva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SvetlanaD1984/nodejs/issues"
+  },
+  "homepage": "https://github.com/SvetlanaD1984/nodejs#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^8.2.2",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1",
+    "yargs": "^17.4.0"
+  }
+}

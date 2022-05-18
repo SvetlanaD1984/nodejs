@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket</title>
+    <script
+      src="https://cdn.socket.io/4.2.0/socket.io.min.js"
+      integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <input type="text" id="input" autofocus />
+    <input type="submit" id="send" value="Send" />
+    <div id="messages"></div>
+    <div id="login"></div>
+    <div id="typing"></div>
+  </body>
+  <script type="text/javascript">
+    const socket = io("localhost:3000");
+    const addMessage = (msg) => {
+      const msgSpan = (document.createElement("span").innerHTML = msg);
+      document.getElementById("messages").append(msgSpan);
+      document.getElementById("messages").append(document.createElement("br"));
+    };
+
+    socket.on("connect", function () {
+      console.log("Successful connected to server");
+    });
+
+    socket.on("NEW_CONN_EVENT", function (data) {
+      addMessage(data.msg);
+    });
+
+    const username = prompt("Введите Ваше имя");
+
+    const addUsers = (username) => {
+      const loginSpan = (document.createElement("span").innerHTML = username);
+      document.getElementById("login").append(loginSpan);
+      document.getElementById("login").append(document.createElement("br"));
+    };
+    socket.on("NEW_LOGIN_EVENT", function (username) {
+      addUsers(data.username);
+    });
+
+    socket.emit("NEW_LOGIN_EVENT", username);
+    console.log(username + " " + "connected");
+
+    socket.emit("ADD_USERS", username);
+
+    socket.on("NEW_DISCONN_EVENT", function (data) {
+      addMessage(data.msg);
+    });
+
+    socket.on("SERVER_MSG", function (data) {
+      addMessage(data.msg);
+    });
+    document.getElementById("send").onclick = function () {
+      socket.emit("CLIENT_MSG", {
+        msg: document.getElementById("input").value,
+      });
+      document.getElementById("input").value = "";
+    };
+
+    const log = document.getElementById("typing");
+    document.addEventListener("keydown", logKey);
+    function logKey(e) {
+      log.textContent = ` ${username} is typing`;
+    }
+
+    socket.on("TYPING", function (msg) {
+      logKey(data.msg);
+    });
+  </script>
+</html>
